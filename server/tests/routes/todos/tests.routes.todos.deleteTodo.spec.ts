@@ -14,7 +14,7 @@ describe("ROUTE - Todos - deleteTodo - DELETE /api/todos/:id", () => {
     res.should.have.status(403);
   });
 
-  it ('should return 403 because the ressource is not owned by the user', async () => {
+  it("should return 403 because the ressource is not owned by the user", async () => {
     const user = await UserFactory();
     const user2 = await UserFactory();
     const todo = await TodoFactory(user2);
@@ -32,7 +32,7 @@ describe("ROUTE - Todos - deleteTodo - DELETE /api/todos/:id", () => {
     res.should.have.status(404);
   });
 
-  it ('should return 400 because the id is not a number', async () => {
+  it("should return 400 because the id is not a number", async () => {
     const user = await UserFactory();
     const token = await generateTokenForUser(user);
     const res = await chai.request(app).delete("/api/todos/abc").set("Authorization", token);

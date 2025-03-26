@@ -14,26 +14,38 @@ describe("ROUTE - Todos - updateTodo - PUT /api/todos/:id", () => {
     res.should.have.status(403);
   });
 
-  it ('should return 403 because the ressource is not owned by the user', async () => {
+  it("should return 403 because the ressource is not owned by the user", async () => {
     const user = await UserFactory();
     const user2 = await UserFactory();
     const todo = await TodoFactory(user2);
     const token = await generateTokenForUser(user);
-    const res = await chai.request(app).put(`/api/todos/${todo.id}`).set("Authorization", token).send({ completed: true });
+    const res = await chai
+      .request(app)
+      .put(`/api/todos/${todo.id}`)
+      .set("Authorization", token)
+      .send({ completed: true });
     res.should.have.status(403);
   });
 
-  it ('should return 400 because the id is not a number', async () => {
+  it("should return 400 because the id is not a number", async () => {
     const user = await UserFactory();
     const token = await generateTokenForUser(user);
-    const res = await chai.request(app).put("/api/todos/abc").set("Authorization", token).send({ completed: true });
+    const res = await chai
+      .request(app)
+      .put("/api/todos/abc")
+      .set("Authorization", token)
+      .send({ completed: true });
     res.should.have.status(400);
   });
 
-  it ('should return 400 because the completed field is not a boolean', async () => {
+  it("should return 400 because the completed field is not a boolean", async () => {
     const user = await UserFactory();
     const token = await generateTokenForUser(user);
-    const res = await chai.request(app).put("/api/todos/1").set("Authorization", token).send({ completed: "lol" });
+    const res = await chai
+      .request(app)
+      .put("/api/todos/1")
+      .set("Authorization", token)
+      .send({ completed: "lol" });
     res.should.have.status(400);
   });
 
