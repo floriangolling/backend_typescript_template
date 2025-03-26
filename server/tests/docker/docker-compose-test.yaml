@@ -1,0 +1,11 @@
+services:
+  database_test:
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: always
+    image: postgres:17.2
+    ports:
+      - "5678:5432"
+    env_file:
+      - ./test.env

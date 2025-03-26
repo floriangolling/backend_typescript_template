@@ -1,0 +1,14 @@
+services:
+  database_dev:
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: always
+    image: postgres:17.2
+    ports:
+      - "5445:5432"
+    env_file:
+      - ./server/.env
+
+volumes:
+  database_dev:

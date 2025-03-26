@@ -1,0 +1,30 @@
+services:
+  legolas_epitech_strasbourg_backend:
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    ports:
+      - "5001:5001"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    env_file:
+      - ./server/.env
+    depends_on:
+      - database
+    restart: always
+
+  database:
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - database:/var/lib/postgresql/data
+    restart: always
+    image: postgres:17.2
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./server/.env
+
+volumes:
+  database:

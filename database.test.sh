@@ -1,0 +1,1 @@
+docker compose -f ./server/tests/docker/docker-compose-test.yaml up database_test -d

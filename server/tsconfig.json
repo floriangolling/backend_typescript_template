@@ -1,0 +1,23 @@
+{
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  },
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": true,
+    "lib": ["es2015", "es2016", "es2017", "es2018", "es2019", "es2020", "esnext"],
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@tests/*": ["tests/*"],
+      "@*": ["src/*"]
+    },
+    "types": ["node", "jest", "mocha"]
+  },
+  "include": ["src/**/*", "tests/**/*"],
+  "files": ["src/type/express.d.ts"],
+  "exclude": ["node_modules", "dist"]
+}

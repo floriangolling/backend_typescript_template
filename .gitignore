@@ -1,0 +1,4 @@
+server/dist
+server/node_modules
+server/.nyc_output
+server/.env
