@@ -3,9 +3,9 @@ import HTTPError from "@type/type.error";
 import { Request, Response } from "express";
 
 const ServiceErrorHTTP = {
-    [TodoServiceErrorType.TODO_NOT_FOUND]: { status: 404, message: "Todo not found" },
-    [TodoServiceErrorType.NOT_USER_TODO]: { status: 403, message: "Not user todo" },
-}
+  [TodoServiceErrorType.TODO_NOT_FOUND]: { status: 404, message: "Todo not found" },
+  [TodoServiceErrorType.NOT_USER_TODO]: { status: 403, message: "Not user todo" },
+};
 
 class TodoController {
   static async createTodo(req: Request, res: Response) {
@@ -55,7 +55,7 @@ class TodoController {
         const { status, message } = ServiceErrorHTTP[err.reason];
         throw new HTTPError(message, status);
       }
-        throw err;
+      throw err;
     }
   }
 

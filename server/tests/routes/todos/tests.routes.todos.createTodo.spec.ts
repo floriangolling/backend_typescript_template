@@ -29,7 +29,7 @@ describe("ROUTE - Todos - createTodo - POST /api/todos", () => {
     res.should.have.status(404);
   });
 
-  it ('should return 400 because the title is missing', async () => {
+  it("should return 400 because the title is missing", async () => {
     const user = await UserFactory();
     const token = await generateTokenForUser(user);
     const res = await chai
@@ -40,7 +40,7 @@ describe("ROUTE - Todos - createTodo - POST /api/todos", () => {
     res.should.have.status(400);
   });
 
-  it ('should return 400 because the description is missing', async () => {
+  it("should return 400 because the description is missing", async () => {
     const user = await UserFactory();
     const token = await generateTokenForUser(user);
     const res = await chai
