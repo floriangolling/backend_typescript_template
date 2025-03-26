@@ -1,0 +1,56 @@
+name: tests
+
+on:
+  pull_request:
+    branches:
+      - '*'      
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17.2
+        ports:
+          - 5434:5432
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_db
+          POSTGRES_PASSWORD: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install --prefix server
+
+    - name: Load environment variables from .env file
+      run: |
+        set -o allexport
+        source server/tests/docker/test.env
+        set +o allexport
+        for var in $(cat server/tests/docker/test.env); do
+          echo "$var" >> $GITHUB_ENV
+        done
+
+    - name: Wait for PostgreSQL
+      run: |
+        until pg_isready -h localhost -p 5434; do
+          echo "Waiting for database..."
+          sleep 1
+        done
+
+    - name: Run tests
+      run: npm run test --prefix server
