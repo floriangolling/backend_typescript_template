@@ -1,11 +1,11 @@
 {
-  "name": "legolas-server",
-  "author": "florian.golling@epitech.eu",
+  "name": "backend_typescript_template",
+  "author": "floriangolling",
   "version": "1.0.0",
   "license": "ISC",
   "private": true,
-  "description": "Legolas server - APOI",
-  "main": "index.js",
+  "description": "A template for a backend project using TypeScript, Express, Sequelize, Biome, Jest",
+  "main": "dist/src/app.js",
   "scripts": {
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
