@@ -1,0 +1,24 @@
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install --prefix server
+
+      - name: Generate coverage badge
+        run: npm run coverage-badge --prefix server
+
+      - name: Commit and push badge
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add server/coverage/badge.svg
+          git commit -m "Update coverage badge [skip ci]" || exit 0
+          git push origin master
