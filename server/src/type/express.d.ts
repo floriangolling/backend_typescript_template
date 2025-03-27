@@ -1,10 +1,11 @@
+import { Request } from "express";
+
 interface MiddlewareUser {
   id: number;
   email: string;
 }
 
-// biome-ignore lint: no-namespace
-declare namespace Express {
+declare module "express-serve-static-core" {
   interface Request {
     user?: MiddlewareUser;
   }
