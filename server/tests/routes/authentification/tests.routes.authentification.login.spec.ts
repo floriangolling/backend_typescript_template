@@ -1,12 +1,18 @@
 import app from "@index";
+import UserService from "@services/user";
 import UserFactory from "@tests/factory/factory.user";
 import { chai, truncateAllTables } from "@tests/utils";
 import bcrypt from "bcrypt";
+import sinon from "sinon";
 
 describe("ROUTE - Authentification - login - POST /api/auth/login", () => {
   beforeEach(async () => {
     const tr = await truncateAllTables();
     return tr;
+  });
+
+  afterEach(() => {
+    sinon.restore();
   });
 
   it("should return 400 if email is missing", async () => {
@@ -46,5 +52,17 @@ describe("ROUTE - Authentification - login - POST /api/auth/login", () => {
       .post("/api/auth/login")
       .send({ email: user.email, password });
     res.should.have.status(200);
+  });
+
+  it("should return 500 if an unexpected error occurs", async () => {
+    const unexpectedError = new Error("Unexpected error");
+    sinon.stub(UserService, "login").throws(unexpectedError);
+
+    const res = await chai
+      .request(app)
+      .post("/api/auth/login")
+      .send({ email: "email", password: "password" });
+
+    res.should.have.status(500);
   });
 });

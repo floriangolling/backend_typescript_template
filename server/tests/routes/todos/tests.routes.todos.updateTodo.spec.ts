@@ -1,12 +1,18 @@
 import app from "@index";
+import TodoService from "@services/todo";
 import TodoFactory from "@tests/factory/factory.todo";
 import UserFactory from "@tests/factory/factory.user";
 import { chai, generateTokenForUser, truncateAllTables } from "@tests/utils";
+import sinon from "sinon";
 
 describe("ROUTE - Todos - updateTodo - PUT /api/todos/:id", () => {
   beforeEach(async () => {
     const tr = await truncateAllTables();
     return tr;
+  });
+
+  afterEach(() => {
+    sinon.restore();
   });
 
   it("should return 403 if token is missing", async () => {
@@ -84,5 +90,20 @@ describe("ROUTE - Todos - updateTodo - PUT /api/todos/:id", () => {
       .send({ completed: true });
     res.should.have.status(200);
     res.body.should.have.property("completed", true);
+  });
+
+  it("should return 500 if an error occured", async () => {
+    const user = await UserFactory();
+    const todo = await TodoFactory(user);
+    const token = await generateTokenForUser(user);
+    const stub = sinon.stub().throws(new Error());
+    sinon.replace(TodoService, "updateTodo", stub);
+
+    const res = await chai
+      .request(app)
+      .put(`/api/todos/${todo.id}`)
+      .set("Authorization", token)
+      .send({ completed: true });
+    res.should.have.status(500);
   });
 });

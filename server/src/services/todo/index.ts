@@ -20,8 +20,10 @@ class TodoService extends BaseService<TodoModel> {
     super(TodoModel);
   }
 
-  async getUserTodos(userId: number, completed: boolean = false) {
-    return this.findAll({ where: { userId, completed } });
+  async getUserTodos(userId: number, completed?: boolean) {
+    const where = completed === undefined ? { userId } : { userId, completed };
+
+    return this.findAll({ where });
   }
 
   async createTodoForUser(data: Pick<TodoModel, "title" | "description">, userId: number) {

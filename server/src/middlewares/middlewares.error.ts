@@ -1,4 +1,3 @@
-import Config from "@config";
 import HTTPError from "@type/type.error";
 import Logger from "@utils/utils.logger";
 import { NextFunction, Request, Response } from "express";

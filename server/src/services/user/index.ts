@@ -44,7 +44,8 @@ class UserService extends BaseService<UserModel> {
     if (!isPasswordValid) {
       throw new UserServiceError(UserServiceErrorType.INVALID_PASSWORD);
     }
-    return user;
+    const token = await this.generateToken(user);
+    return token;
   }
 
   async generateToken(user: UserModel) {
