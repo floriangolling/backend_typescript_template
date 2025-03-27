@@ -16,7 +16,8 @@
     "test": "NODE_ENV=test npm run db:migrate up && NODE_ENV=test_mocha mocha --paths tsconfig.json -r ts-node/register tests/setup.ts 'tests/**/*.ts' --exit --timeout 10000",
     "test:coverage": "NODE_ENV=test npm run db:migrate up && NODE_ENV=test_mocha nyc -r text --reporter=json-summary mocha --paths tsconfig.json -r ts-node/register tests/setup.ts 'tests/**/*.ts' --exit --timeout 10000",
     "coverage-badge": "coverage-badges-cli",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
@@ -33,6 +34,7 @@
     "chai": "^4.1.1",
     "chai-http": "^4.4.0",
     "globals": "^16.0.0",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
     "mocha": "^11.1.0",
     "nodemon": "^3.1.9",
