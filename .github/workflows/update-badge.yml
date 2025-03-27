@@ -1,3 +1,15 @@
+name: update-badge
+
+on:
+  pull_request:
+    branches:
+      - '*'      
+
+  push:
+    branches:
+      - master
+
+jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
