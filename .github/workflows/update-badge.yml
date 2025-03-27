@@ -60,13 +60,6 @@ jobs:
       - name: Generate coverage badge
         run: npm run coverage-badge --prefix server
 
-      - name: check if the coverage-summary.json exists
-        run: |
-          if [ ! -f server/coverage/coverage-summary.json ]; then
-            echo "coverage-summary.json does not exist"
-            exit 1
-          fi
-
       - name: Commit and push badge
         run: |
           git config --global user.name "github-actions[bot]"
