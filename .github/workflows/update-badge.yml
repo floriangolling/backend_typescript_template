@@ -60,17 +60,10 @@ jobs:
       - name: Generate coverage badge
         run: npm run coverage-badge --prefix server
 
-      - name: check if the coverage-summary.json exists
-        run: |
-          if [ ! -f server/coverage/coverage-summary.json ]; then
-            echo "coverage-summary.json does not exist"
-            exit 1
-          fi
-
       - name: Commit and push badge
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add coverage/badges.svg
+          git add server/coverage/badges.svg
           git commit -m "Update coverage badge [skip ci]" || exit 0
           git push origin master
