@@ -14,7 +14,8 @@
     "start": "npm run build && npm run db:migrate up && node dist/src/app.js",
     "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "test": "NODE_ENV=test npm run db:migrate up && NODE_ENV=test_mocha mocha --paths tsconfig.json -r ts-node/register tests/setup.ts 'tests/**/*.ts' --exit --timeout 10000",
-    "test:coverage": "NODE_ENV=test npm run db:migrate up && NODE_ENV=test_mocha nyc --reporter=text mocha --paths tsconfig.json -r ts-node/register tests/setup.ts 'tests/**/*.ts' --exit --timeout 10000",
+    "test:coverage": "NODE_ENV=test npm run db:migrate up && NODE_ENV=test_mocha nyc -r text --reporter=json-summary mocha --paths tsconfig.json -r ts-node/register tests/setup.ts 'tests/**/*.ts' --exit --timeout 10000",
+    "coverage-badge": "coverage-badges-cli",
     "dev": "nodemon"
   },
   "devDependencies": {
@@ -48,6 +49,7 @@
     "bcrypt": "^5.1.1",
     "chalk": "^4.1.2",
     "cors": "^2.8.5",
+    "coverage-badges-cli": "^2.1.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-async-errors": "^3.1.1",
