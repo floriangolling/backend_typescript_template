@@ -47,7 +47,7 @@ It is currently working as a Todo API
     ```
   - **`create`**: Creates a new migration file.
     ```bash
-    npm run db:migrate create
+    npm run db:migrate create [filename]
     ```
 
 - **`start`**: Builds the app, runs database migrations, and starts the application.
