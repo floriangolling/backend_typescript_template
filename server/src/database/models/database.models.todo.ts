@@ -1,5 +1,6 @@
 import UserModel from "@database/models/database.models.user";
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import { ApiModel, ApiModelProperty } from "swagger-express-ts";
 
 interface TodoAttributes {
   id: number;
@@ -14,6 +15,10 @@ interface TodoAttributes {
 interface TodoCreationsAttributes
   extends Optional<TodoAttributes, "id" | "createdAt" | "updatedAt" | "completed"> {}
 
+@ApiModel({
+  description: "Todo model",
+  name: "Todo",
+})
 export default class TodoModel extends Model<TodoAttributes, TodoCreationsAttributes> {
   public static definition(sequelize: Sequelize) {
     TodoModel.init(
@@ -71,28 +76,52 @@ export default class TodoModel extends Model<TodoAttributes, TodoCreationsAttrib
     });
   }
 
+  @ApiModelProperty({
+    description: "Todo title",
+    type: "string",
+    required: true,
+  })
   public title!: string;
 
+  @ApiModelProperty({
+    description: "Todo description",
+    type: "string",
+    required: true,
+  })
   public description!: string;
 
+  @ApiModelProperty({
+    description: "Todo completed status",
+    type: "boolean",
+    required: false,
+  })
   public completed!: boolean;
 
+  @ApiModelProperty({
+    description: "Todo creation date",
+    type: "date",
+    required: true,
+  })
   public id!: number;
 
+  @ApiModelProperty({
+    description: "Todo user id",
+    type: "number",
+    required: true,
+  })
   public userId!: number;
 
+  @ApiModelProperty({
+    description: "Todo creation date",
+    type: "date",
+    required: true,
+  })
   public createdAt!: Date;
 
+  @ApiModelProperty({
+    description: "Todo update date",
+    type: "date",
+    required: true,
+  })
   public updatedAt!: Date;
 }
-
-/**
- * @typedef Todo
- * @property {string} title
- * @property {string} description
- * @property {boolean} completed
- * @property {number} userId
- * @property {string} createdAt
- * @property {string} updatedAt
- * @property {number} id
- */

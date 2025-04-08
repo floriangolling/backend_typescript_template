@@ -2,18 +2,13 @@ import cors from "cors";
 import express from "express";
 
 import "express-async-errors";
+import "reflect-metadata";
 import Config from "@config";
 import ConnectToDatabase, { sequelize } from "@database";
 import ErrorWrapper from "@middlewares/middlewares.error";
 import Router from "@routes";
-import swaggerOptions from "@swagger";
 import Logger from "@utils/utils.logger";
-
 const app = express();
-
-const expressSwagger = require("express-swagger-generator")(app);
-
-expressSwagger(swaggerOptions);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

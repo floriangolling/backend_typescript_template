@@ -3,6 +3,8 @@
     "require": ["tsconfig-paths/register"]
   },
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "target": "es6",
     "module": "commonjs",
     "outDir": "./dist",

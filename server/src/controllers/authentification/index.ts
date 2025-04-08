@@ -1,6 +1,7 @@
 import UserService, { UserServiceError, UserServiceErrorType } from "@services/user";
 import HTTPError from "@type/type.error";
 import { Request, Response } from "express";
+import { ApiOperationPost, ApiPath, SwaggerDefinitionConstant } from "swagger-express-ts";
 import { z } from "zod";
 
 const ServiceErrorHTTP = {
@@ -9,6 +10,11 @@ const ServiceErrorHTTP = {
   [UserServiceErrorType.USER_ALREADY_EXIST]: { status: 400, message: "User already exist" },
 };
 
+@ApiPath({
+  name: "Authentification",
+  path: "/api/auth",
+  description: "Authentification",
+})
 class AuthentificationController {
   // ----------------------------------------------------------------------------------
 
@@ -17,7 +23,26 @@ class AuthentificationController {
     password: z.string().min(8, "password must be at least 8 characters long"),
   });
 
-  static async login(req: Request, res: Response) {
+  @ApiOperationPost({
+    path: "/login",
+    description: "Login",
+    parameters: {
+      body: {
+        properties: {
+          email: { type: SwaggerDefinitionConstant.Parameter.Type.STRING, required: true },
+          password: { type: SwaggerDefinitionConstant.Parameter.Type.STRING, required: true },
+        },
+      },
+    },
+    responses: {
+      200: { type: SwaggerDefinitionConstant.Response.Type.OBJECT, model: "TokenResponse" },
+      400: { description: "Bad request" },
+      401: { description: "Invalid password" },
+      404: { description: "User not found" },
+      500: { description: "Internal server error" },
+    },
+  })
+  public async login(req: Request, res: Response) {
     const email = req.body.email;
     const password = req.body.password;
 
@@ -47,7 +72,24 @@ class AuthentificationController {
     password: z.string().min(8, "password must be at least 8 characters long"),
   });
 
-  static async register(req: Request, res: Response) {
+  @ApiOperationPost({
+    path: "/register",
+    description: "Register",
+    parameters: {
+      body: {
+        properties: {
+          email: { type: SwaggerDefinitionConstant.Parameter.Type.STRING, required: true },
+          password: { type: SwaggerDefinitionConstant.Parameter.Type.STRING, required: true },
+        },
+      },
+    },
+    responses: {
+      200: { type: SwaggerDefinitionConstant.Response.Type.OBJECT, model: "TokenResponse" },
+      400: { description: "Bad request" },
+      500: { description: "Internal server error" },
+    },
+  })
+  public async register(req: Request, res: Response) {
     const email = req.body.email;
     const password = req.body.password;
 

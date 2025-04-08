@@ -1,5 +1,6 @@
 import TodoModel from "@/database/models/database.models.todo";
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import { ApiModel, ApiModelProperty } from "swagger-express-ts";
 
 interface UserAttributes {
   id: number;
@@ -12,6 +13,10 @@ interface UserAttributes {
 interface UserCreationAttributes
   extends Optional<UserAttributes, "id" | "createdAt" | "updatedAt"> {}
 
+@ApiModel({
+  description: "User model",
+  name: "User",
+})
 export default class UserModel extends Model<UserAttributes, UserCreationAttributes> {
   public static definition(sequelize: Sequelize) {
     UserModel.init(
@@ -57,16 +62,49 @@ export default class UserModel extends Model<UserAttributes, UserCreationAttribu
     });
   }
 
+  @ApiModelProperty({
+    description: "User password",
+    required: true,
+    type: "string",
+    format: "password",
+  })
   public password!: string;
 
+  @ApiModelProperty({
+    description: "User email",
+    required: true,
+    type: "string",
+    format: "email",
+  })
   public email!: string;
 
+  @ApiModelProperty({
+    description: "User id",
+    required: true,
+    type: "number",
+  })
   public id!: number;
 
+  @ApiModelProperty({
+    description: "User todos",
+    required: false,
+    type: "array",
+    itemType: "Todo",
+  })
   public readonly todos?: TodoModel[];
 
+  @ApiModelProperty({
+    description: "User creation date",
+    required: true,
+    type: "date",
+  })
   public createdAt!: Date;
 
+  @ApiModelProperty({
+    description: "User update date",
+    required: true,
+    type: "date",
+  })
   public updatedAt!: Date;
 }
 

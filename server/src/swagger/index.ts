@@ -1,27 +1,19 @@
-import path from "path";
+import * as swagger from "swagger-express-ts";
+import "./swagger.token";
 
 export default {
-  route: {
-    url: "/api/docs",
-    docs: "/api/docs.json",
-  },
-  swaggerDefinition: {
+  definition: {
     info: {
-      description: "TodoLIST - API",
-      title: "TodoLIST - Swagger",
-      version: "1.0.0",
+      title: "Template - API",
+      version: "1.0",
     },
-    produces: ["application/json", "application/xml"],
     schemes: ["http", "https"],
     securityDefinitions: {
-      JWT: {
-        type: "apiKey",
-        in: "header",
-        name: "Authorization",
-        description: "",
+      bearerAuth: {
+        type: swagger.SwaggerDefinitionConstant.Security.Type.API_KEY,
+        in: swagger.SwaggerDefinitionConstant.Security.In.HEADER,
+        name: "authorization",
       },
     },
   },
-  basedir: path.resolve(__dirname, ".."),
-  files: ["routes/**/*.js", "routes/**/*.ts", "database/models/*.js", "database/models/*.ts"],
 };

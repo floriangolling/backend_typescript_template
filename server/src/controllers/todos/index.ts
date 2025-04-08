@@ -1,6 +1,14 @@
 import TodoService, { TodoServiceError, TodoServiceErrorType } from "@services/todo";
 import HTTPError from "@type/type.error";
 import { Request, Response } from "express";
+import {
+  ApiOperationDelete,
+  ApiOperationGet,
+  ApiOperationPost,
+  ApiOperationPut,
+  ApiPath,
+  SwaggerDefinitionConstant,
+} from "swagger-express-ts";
 import { z } from "zod";
 
 const ServiceErrorHTTP = {
@@ -8,6 +16,10 @@ const ServiceErrorHTTP = {
   [TodoServiceErrorType.NOT_USER_TODO]: { status: 403, message: "Not user todo" },
 };
 
+@ApiPath({
+  name: "Todos",
+  path: "/api/todos",
+})
 class TodoController {
   // ----------------------------------------------------------------------------------
 
@@ -16,7 +28,24 @@ class TodoController {
     description: z.string().min(1, "description is required"),
   });
 
-  static async createTodo(req: Request, res: Response) {
+  @ApiOperationPost({
+    description: "Create a todo",
+    security: { bearerAuth: [] },
+    parameters: {
+      body: {
+        properties: {
+          title: { type: SwaggerDefinitionConstant.Parameter.Type.STRING, required: true },
+          description: { type: SwaggerDefinitionConstant.Parameter.Type.STRING, required: true },
+        },
+      },
+    },
+    responses: {
+      201: { type: SwaggerDefinitionConstant.Response.Type.OBJECT, model: "Todo" },
+      400: { description: "Bad request" },
+      500: { description: "Internal server error" },
+    },
+  })
+  public async createTodo(req: Request, res: Response) {
     const title = req.body.title;
     const description = req.body.description;
 
@@ -37,7 +66,32 @@ class TodoController {
     id: z.string().regex(/^\d+$/, "id must be a positive integer"),
   });
 
-  static async updateTodo(req: Request, res: Response) {
+  @ApiOperationPut({
+    path: "/{id}",
+    parameters: {
+      path: {
+        id: {
+          description: "Todo id",
+          required: true,
+          type: SwaggerDefinitionConstant.Parameter.Type.STRING,
+        },
+      },
+      body: {
+        properties: {
+          completed: { type: SwaggerDefinitionConstant.Parameter.Type.BOOLEAN, required: true },
+        },
+      },
+    },
+    description: "Update a todo",
+    security: { bearerAuth: [] },
+    responses: {
+      200: { type: SwaggerDefinitionConstant.Response.Type.OBJECT, model: "Todo" },
+      400: { description: "Bad request" },
+      404: { description: "Todo not found" },
+      500: { description: "Internal server error" },
+    },
+  })
+  public async updateTodo(req: Request, res: Response) {
     const id = req.params.id;
     const completed = req.body.completed;
 
@@ -69,7 +123,27 @@ class TodoController {
     id: z.string().regex(/^\d+$/, "id must be a positive integer"),
   });
 
-  static async deleteTodo(req: Request, res: Response) {
+  @ApiOperationDelete({
+    path: "/{id}",
+    description: "Delete a todo",
+    security: { bearerAuth: [] },
+    parameters: {
+      path: {
+        id: {
+          description: "Todo id",
+          required: true,
+          type: SwaggerDefinitionConstant.Parameter.Type.STRING,
+        },
+      },
+    },
+    responses: {
+      204: { description: "Todo deleted" },
+      400: { description: "Bad request" },
+      404: { description: "Todo not found" },
+      500: { description: "Internal server error" },
+    },
+  })
+  public async deleteTodo(req: Request, res: Response) {
     const id = req.params.id;
 
     const schemaResult = TodoController.deleteTodoScheam.safeParse({ id });
@@ -92,7 +166,17 @@ class TodoController {
 
   // ----------------------------------------------------------------------------------
 
-  static async getUserTodos(req: Request, res: Response) {
+  @ApiOperationGet({
+    description: "Get user todos",
+    security: { bearerAuth: [] },
+    responses: {
+      200: { type: SwaggerDefinitionConstant.Response.Type.ARRAY, model: "Todo" },
+      403: { description: "Token missing" },
+      404: { description: "User not found" },
+      500: { description: "Internal server error" },
+    },
+  })
+  public async getUserTodos(req: Request, res: Response) {
     const todos = await TodoService.getUserTodos(req.user!.id);
     res.json(todos);
   }
