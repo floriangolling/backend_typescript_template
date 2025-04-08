@@ -29,7 +29,7 @@ describe("ROUTE - Authentification - login - POST /api/auth/login", () => {
     const res = await chai
       .request(app)
       .post("/api/auth/login")
-      .send({ email: "email", password: "password" });
+      .send({ email: "email@email.fr", password: "password" });
     res.should.have.status(404);
   });
 
@@ -61,7 +61,7 @@ describe("ROUTE - Authentification - login - POST /api/auth/login", () => {
     const res = await chai
       .request(app)
       .post("/api/auth/login")
-      .send({ email: "email", password: "password" });
+      .send({ email: "email@email.fr", password: "password" });
 
     res.should.have.status(500);
   });

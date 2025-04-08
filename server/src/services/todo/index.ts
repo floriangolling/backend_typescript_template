@@ -20,15 +20,21 @@ class TodoService extends BaseService<TodoModel> {
     super(TodoModel);
   }
 
+  // ----------------------------------------------------------------------------------
+
   async getUserTodos(userId: number, completed?: boolean) {
     const where = completed === undefined ? { userId } : { userId, completed };
 
     return this.findAll({ where });
   }
 
+  // ----------------------------------------------------------------------------------
+
   async createTodoForUser(data: Pick<TodoModel, "title" | "description">, userId: number) {
     return this.create({ ...data, userId });
   }
+
+  // ----------------------------------------------------------------------------------
 
   async updateTodo(data: Pick<TodoModel, "completed">, id: number, userId: number) {
     const todo = await this.findById(id);
@@ -41,6 +47,8 @@ class TodoService extends BaseService<TodoModel> {
     todo.set(data);
     return todo.save();
   }
+
+  // ----------------------------------------------------------------------------------
 
   async deleteTodoById(id: number, userId: number) {
     const todo = await this.findById(id);

@@ -1,6 +1,7 @@
 import UserService, { UserServiceError, UserServiceErrorType } from "@services/user";
 import HTTPError from "@type/type.error";
 import { Request, Response } from "express";
+import { z } from "zod";
 
 const ServiceErrorHTTP = {
   [UserServiceErrorType.USER_NOT_FOUND]: { status: 404, message: "User not found" },
@@ -9,16 +10,26 @@ const ServiceErrorHTTP = {
 };
 
 class AuthentificationController {
+  // ----------------------------------------------------------------------------------
+
+  static loginSchema = z.object({
+    email: z.string().email("invalid email format"),
+    password: z.string().min(8, "password must be at least 8 characters long"),
+  });
+
   static async login(req: Request, res: Response) {
     const email = req.body.email;
     const password = req.body.password;
 
-    if (!email || !password) {
-      throw new HTTPError("Bad request", 400);
+    const schemaResult = AuthentificationController.loginSchema.safeParse({ email, password });
+
+    if (!schemaResult.success) {
+      const errors = schemaResult.error.errors.map((error) => error.message);
+      throw new HTTPError(errors.join(", "), 400);
     }
 
     try {
-      const token = await UserService.login({ email, password });
+      const token = await UserService.login(schemaResult.data);
       res.json({ token });
     } catch (err) {
       if (err instanceof UserServiceError && ServiceErrorHTTP[err.reason]) {
@@ -29,16 +40,26 @@ class AuthentificationController {
     }
   }
 
+  // ----------------------------------------------------------------------------------
+
+  static registerSchema = z.object({
+    email: z.string().email("invalid email format"),
+    password: z.string().min(8, "password must be at least 8 characters long"),
+  });
+
   static async register(req: Request, res: Response) {
     const email = req.body.email;
     const password = req.body.password;
 
-    if (!email || !password) {
-      throw new HTTPError("Bad request", 400);
+    const schemaResult = AuthentificationController.registerSchema.safeParse({ email, password });
+
+    if (!schemaResult.success) {
+      const errors = schemaResult.error.errors.map((error) => error.message);
+      throw new HTTPError(errors.join(", "), 400);
     }
 
     try {
-      const user = await UserService.register({ email, password });
+      const user = await UserService.register(schemaResult.data);
       const token = await UserService.generateToken(user);
       res.json({ token });
     } catch (err) {
