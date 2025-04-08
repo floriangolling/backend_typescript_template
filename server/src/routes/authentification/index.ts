@@ -12,4 +12,6 @@ AuthentificationRouter.post("/login", AuthentificationControllerInstance.login);
 
 AuthentificationRouter.post("/register", AuthentificationControllerInstance.register);
 
+// ----------------------------------------------------------------------------------
+
 export default AuthentificationRouter;

@@ -7,6 +7,8 @@ import * as swagger from "swagger-express-ts";
 
 const apiRouter = Router();
 
+// ----------------------------------------------------------------------------------
+
 /* PUBLIC ROUTES */
 
 apiRouter.use("/api-docs/swagger", express.static("src/swagger"));
@@ -19,8 +21,12 @@ apiRouter.use("/auth", AuthentificationRouter);
 
 apiRouter.use(middlewareJwt);
 
+// ----------------------------------------------------------------------------------
+
 /* PROTECTED ROUTES */
 
 apiRouter.use("/todos", TodosRouter);
+
+// ----------------------------------------------------------------------------------
 
 export default apiRouter;

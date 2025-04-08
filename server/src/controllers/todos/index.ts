@@ -49,11 +49,13 @@ class TodoController {
     const title = req.body.title;
     const description = req.body.description;
 
-    if (!title || !description) {
-      throw new HTTPError("Bad request", 400);
+    const schemaResult = TodoController.createTodoSchema.safeParse({ title, description });
+    if (!schemaResult.success) {
+      const errors = schemaResult.error.errors.map((error) => error.message);
+      throw new HTTPError(errors.join(", "), 400);
     }
 
-    const todo = await TodoService.createTodoForUser({ title, description }, req.user!.id);
+    const todo = await TodoService.createTodoForUser(schemaResult.data, req.user!.id);
     res.status(201).json(todo);
   }
 
@@ -93,12 +95,18 @@ class TodoController {
     const id = req.params.id;
     const completed = req.body.completed;
 
-    if (typeof completed !== "boolean" || Number.isNaN(Number(id))) {
-      throw new HTTPError("Bad request", 400);
+    const schemaResult = TodoController.updateTodoSchema.safeParse({ completed, id });
+    if (!schemaResult.success) {
+      const errors = schemaResult.error.errors.map((error) => error.message);
+      throw new HTTPError(errors.join(", "), 400);
     }
 
     try {
-      const todo = await TodoService.updateTodo({ completed }, Number(id), req.user!.id);
+      const todo = await TodoService.updateTodo(
+        { completed: schemaResult.data.completed },
+        Number(schemaResult.data.id),
+        req.user!.id,
+      );
       res.status(200).json(todo);
     } catch (err) {
       if (err instanceof TodoServiceError && ServiceErrorHTTP[err.reason]) {
@@ -138,12 +146,14 @@ class TodoController {
   public async deleteTodo(req: Request, res: Response) {
     const id = req.params.id;
 
-    if (Number.isNaN(Number(id))) {
-      throw new HTTPError("Bad request", 400);
+    const schemaResult = TodoController.deleteTodoScheam.safeParse({ id });
+    if (!schemaResult.success) {
+      const errors = schemaResult.error.errors.map((error) => error.message);
+      throw new HTTPError(errors.join(", "), 400);
     }
 
     try {
-      await TodoService.deleteTodoById(Number(id), req.user!.id);
+      await TodoService.deleteTodoById(Number(schemaResult.data.id), req.user!.id);
       res.status(204).send();
     } catch (err) {
       if (err instanceof TodoServiceError && ServiceErrorHTTP[err.reason]) {

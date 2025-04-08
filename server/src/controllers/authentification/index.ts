@@ -46,12 +46,15 @@ class AuthentificationController {
     const email = req.body.email;
     const password = req.body.password;
 
-    if (!email || !password) {
-      throw new HTTPError("Bad request", 400);
+    const schemaResult = AuthentificationController.loginSchema.safeParse({ email, password });
+
+    if (!schemaResult.success) {
+      const errors = schemaResult.error.errors.map((error) => error.message);
+      throw new HTTPError(errors.join(", "), 400);
     }
 
     try {
-      const token = await UserService.login({ email, password });
+      const token = await UserService.login(schemaResult.data);
       res.json({ token });
     } catch (err) {
       if (err instanceof UserServiceError && ServiceErrorHTTP[err.reason]) {
@@ -90,12 +93,15 @@ class AuthentificationController {
     const email = req.body.email;
     const password = req.body.password;
 
-    if (!email || !password) {
-      throw new HTTPError("Bad request", 400);
+    const schemaResult = AuthentificationController.registerSchema.safeParse({ email, password });
+
+    if (!schemaResult.success) {
+      const errors = schemaResult.error.errors.map((error) => error.message);
+      throw new HTTPError(errors.join(", "), 400);
     }
 
     try {
-      const user = await UserService.register({ email, password });
+      const user = await UserService.register(schemaResult.data);
       const token = await UserService.generateToken(user);
       res.json({ token });
     } catch (err) {
