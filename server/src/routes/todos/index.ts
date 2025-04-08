@@ -3,6 +3,8 @@ import { Router } from "express";
 
 const TodoRouter = Router();
 
+// ----------------------------------------------------------------------------------
+
 /**
  * @route GET /api/todos
  * @group Todos
@@ -14,6 +16,8 @@ const TodoRouter = Router();
  */
 TodoRouter.get("/", TodoController.getUserTodos);
 
+// ----------------------------------------------------------------------------------
+
 /**
  * @route POST /api/todos
  * @group Todos
@@ -24,6 +28,8 @@ TodoRouter.get("/", TodoController.getUserTodos);
  * @security JWT
  */
 TodoRouter.post("/", TodoController.createTodo);
+
+// ----------------------------------------------------------------------------------
 
 /**
  * @route PUT /api/todos/{id}
@@ -38,6 +44,8 @@ TodoRouter.post("/", TodoController.createTodo);
  */
 TodoRouter.put("/:id", TodoController.updateTodo);
 
+// ----------------------------------------------------------------------------------
+
 /**
  * @route DELETE /api/todos/{id}
  * @group Todos
@@ -49,5 +57,7 @@ TodoRouter.put("/:id", TodoController.updateTodo);
  * @security JWT
  */
 TodoRouter.delete("/:id", TodoController.deleteTodo);
+
+// ----------------------------------------------------------------------------------
 
 export default TodoRouter;

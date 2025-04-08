@@ -24,6 +24,8 @@ class UserService extends BaseService<UserModel> {
     super(UserModel);
   }
 
+  // ----------------------------------------------------------------------------------
+
   async register(data: Pick<UserModel, "email" | "password">) {
     const user = await this.findOne({ where: { email: data.email } });
 
@@ -33,6 +35,8 @@ class UserService extends BaseService<UserModel> {
     const password = await bcrypt.hash(data.password, 10);
     return this.create({ ...data, password });
   }
+
+  // ----------------------------------------------------------------------------------
 
   async login(data: Pick<UserModel, "email" | "password">) {
     const user = await this.findOne({ where: { email: data.email } });
@@ -47,6 +51,8 @@ class UserService extends BaseService<UserModel> {
     const token = await this.generateToken(user);
     return token;
   }
+
+  // ----------------------------------------------------------------------------------
 
   async generateToken(user: UserModel) {
     return jwt.sign({ email: user.email, id: user.id }, Config.JWT_SECRET, { expiresIn: "24h" });

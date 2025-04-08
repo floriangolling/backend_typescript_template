@@ -3,6 +3,8 @@ import { Router } from "express";
 
 const AuthentificationRouter = Router();
 
+// ----------------------------------------------------------------------------------
+
 /**
  * @route POST /api/auth/login
  * @group Authentification
@@ -16,6 +18,8 @@ const AuthentificationRouter = Router();
  */
 AuthentificationRouter.post("/login", AuthentificationController.login);
 
+// ----------------------------------------------------------------------------------
+
 /**
  * @route POST /api/auth/register
  * @group Authentification
@@ -27,5 +31,7 @@ AuthentificationRouter.post("/login", AuthentificationController.login);
  * @returns {Error} 500 - Internal server error
  */
 AuthentificationRouter.post("/register", AuthentificationController.register);
+
+// ----------------------------------------------------------------------------------
 
 export default AuthentificationRouter;
