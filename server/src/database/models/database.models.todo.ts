@@ -109,12 +109,6 @@ export default class TodoModel extends Model<TodoAttributes, TodoCreationsAttrib
     type: "number",
     required: true,
   })
-
-  @ApiModelProperty({
-    description: "Todo user id",
-    type: "number",
-    required: true,
-  })
   public userId!: number;
 
   @ApiModelProperty({
