@@ -60,7 +60,7 @@
     "pg": "^8.14.1",
     "sequelize": "^6.37.7",
     "swagger-express-ts": "^1.1.0",
-    "swagger-ui-dist": "^5.20.7",
+    "swagger-ui-dist": "^5.21.0",
     "umzug": "^3.8.1",
     "zod": "^3.24.2"
   }
