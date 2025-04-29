@@ -1,5 +1,5 @@
 services:
-  legolas_epitech_strasbourg_backend:
+  server:
     build:
       context: .
       dockerfile: ./server/Dockerfile
